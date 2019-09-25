@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Quotes LOGIN</title>
+<style>
+ 
+    form{
+        display: inline-block;
+        margin: 75px;
+    }
+</style>
+</head>
+<body>
+    <ul>
+    {% if messages %}
+    {% for message in messages %}
+    <li style="color: red;">{{ message }}</li>
+    {% endfor %}
+    {% endif %}
+    </ul>
+    <div class="container">
+        <form action="/register" method="POST">
+            {% csrf_token %}
+            <h1>Registration</h1>
+            <div>
+                <label for="name">Name:</label>
+                <input type="text" name="name">
+            </div>
+            <div>
+                <label for="email">Email:</label>
+                <input type="text" name="email">
+            </div>
+            <div>
+                <label for="password">Password:</label>
+                <input type="password" name="password">
+            </div>
+            <div>
+                <label for="confirmpassword">Confirm Password</label>
+                <input type="password" name="confirmpassword">
+            </div>
+            <input type="submit" value="Register">
+        </form>
+        
+        <form action="/login" method="POST">
+            <h1>Login</h1>
+            {% csrf_token %}
+            <div>
+                <label for="email">Email:</label>
+                <input type="text" name="email">
+            </div>
+            <div>
+                <label for="password">Password</label>
+                <input type="password" name="password">
+            </div>
+            <input type="submit" value="Login">
+        </form>
+    </div>
+    
+</body>
+</html>

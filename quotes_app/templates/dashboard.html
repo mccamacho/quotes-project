@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Dashboard</title>
+<style>
+.container{
+    padding: 10px;
+    
+}
+.logout{
+    margin-left: 85%;
+} 
+.favorites, .quotebox, .quote_form{
+    outline: 1px solid black;
+    
+}
+.favorites, .quote_form{
+    width: 20%; 
+    margin-bottom: 5px;
+    margin: 0;
+}
+.favorites .quotable_quotes{
+    display: inline-block;
+}
+form.quotebox{
+    margin: 5px;
+    width: 100%;
+    padding: 5px;
+}
+.quote_form{
+    padding: 5px;
+    margin: 5px;
+    width: 55%;
+}
+form{
+    width: 100%;
+}
+.leftbox{
+    width: 30%;
+    display: inline-block;
+}
+.rightbox{
+    width: 30%;
+    display: inline-block;
+    margin-left: 5%;
+}
+
+
+
+</style>
+</head>
+<body>
+    <a href="/logout" class="logout">Logout</a>
+    <div class="container">
+        <h1>Welcome {{loggedinUser.name}}!</h1>
+        <div class="leftbox">
+            <h2>My favorites:</h2>
+            
+            {% for quote in favorites %}
+                <form action="/{{quote.id}}/removefavorite" class="quotebox">
+                    {% if quote.poster.id == loggedinUser.id %}
+                    <header> <a href="/quotes/{{quote.id}}">Edit</a> | <a href="/delete/{{quote.id}}">Delete</a> </header>
+                    {% endif %}
+                    <p>{{quote.quote_owner}}: {{quote.message}}</p>
+                    <footer>Posted by: <a href="user/{{quote.poster.id}}">{{quote.poster.name}}</a></footer>
+                    <input type="submit" value="Remove">
+                </form>
+            {% endfor %}
+            <!-- examplebox -->
+            {% for quote in favorites_notcreated %}
+            <p>{{quote.quote.owner}}: {{quote.message}}</p>
+            {% endfor %}
+        </div>
+
+        <div class="rightbox">
+            <h2>Quotable quotes</h2>
+            <div class="quotable_quotes">
+            {% for quote in allquotes %}
+            <div class="allquotes">
+                <form action="/{{quote.id}}/addfavorites" class="quotebox">
+                    <!-- <header> <a href="/quotes/{{quote.id}}">Edit</a> | <a href="/delete/{{quote.id}}">Delete</a> </header> -->
+                    <p>{{quote.quote_owner}}: {{quote.message}}</p>
+                    <footer>Posted by: <a href="user/{{.id}}">{{quote.poster.name}}</a> </footer>
+                    <input type="submit" value="Add to favorites">
+                </form>
+            </div>  
+            {% endfor %}
+            </div>
+        </div>
+        
+        <div class="quote_form">
+            <ul>
+                {% if messages %}
+                {% for message in messages %}
+                <li style="color: red;">{{ message }}</li>
+                {% endfor %}
+                {% endif %}
+            </ul>
+            <form action="/addquote" method="POST">
+                {% csrf_token %}
+                <h3>Contribute a Quote</h3>
+                <label for="owner">Quoted by:</label>
+                <input type="text" name="owner"><br>
+                <label for="message">Message:</label>
+                <textarea name="message" id="messagebox" cols="30" rows="10"></textarea><br>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+    </div>
+    </body>
+</html>
